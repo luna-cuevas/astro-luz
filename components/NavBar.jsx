@@ -15,7 +15,7 @@ const NavBar = ({categories}) => {
   const { totalPrice, totalQuantity, cartItems, setShowCart, updateCartItemQty, removeFromCart, showCart } = useStateContext()
 
   return (
-    <nav className='w-screen relative max-h-[10vh] z-50 border-b-2 border-gray-700 hover:bg-[#c6c3d6] transition-[background] duration-500 '>
+    <nav className='w-full max-w-[1600px] mx-auto relative max-h-[10vh] z-50 bg-[#c6c3d6]'>
       <div className='flex px-2 group justify-between max-w-[1200px] mx-auto z-50 bg-transparent hover:text-black'>
 
         <img src="/favicon.ico" alt="" />
