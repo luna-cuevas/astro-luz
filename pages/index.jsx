@@ -15,11 +15,17 @@ import 'swiper/css/scrollbar';
 import "swiper/css/effect-creative";
 
 import windowSize from '../lib/windowSize';
+import Button from '../components/Button';
+
+import TextTransition, { presets } from "react-text-transition";
+
 
 const Home = ( { products, categories } ) => {
   const swiper1Ref = useRef();
   const swiper2Ref = useRef();
   const size = windowSize();
+  const [index, setIndex] = useState(0);
+
 
   const sliderImages = [
     {
@@ -48,6 +54,13 @@ const Home = ( { products, categories } ) => {
     },
   ]
 
+  const TEXTS = [
+    "woman owned",
+    "radically expressive",
+    "uniquely ourselves",
+    "proud"
+  ];
+
   useLayoutEffect(() => {
     swiper1Ref.current.controller.control = swiper2Ref.current;
     swiper2Ref.current.controller.control = swiper1Ref.current;
@@ -65,6 +78,14 @@ const Home = ( { products, categories } ) => {
     sliderRef.current.swiper.slideNext();
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() =>
+      setIndex(index => index + 1),
+      3000 // every 3 seconds
+    );
+    return () => clearTimeout(intervalId);
+  }, []);
+
 
   return (
     <Layout categories={categories}>
@@ -72,13 +93,10 @@ const Home = ( { products, categories } ) => {
         <div className='!relative bg-white flex-col md:flex-row h-full py-5 mx-auto w-full flex'>
           <Swiper
             modules={[ 
-              Navigation, 
-              Pagination, 
               EffectCreative,
               Autoplay,
               Controller]}
             slidesPerView={1}
-            navigation
             loop={true}
             autoplay={{
               delay: 10000,
@@ -100,7 +118,6 @@ const Home = ( { products, categories } ) => {
             }}
             className="mySwiper sm:max-w-[300px] md:max-w-[400px] lg:max-w-[550px] !mx-0 !z-50 "
             style={{'color': 'white !important'}}
-            pagination={{ clickable: true }}
           >
             {sliderImages.map((item, id) => (
               <SwiperSlide style={{'backgroundImage': size.width < 640 ? item.bgColorMobile : ''}} className="flex flex-col p-4 select-none">
@@ -137,9 +154,9 @@ const Home = ( { products, categories } ) => {
           </Swiper>
         </div>
 
-        <div className='md:mt-0 bg-[#f3f8fe] flex flex-col w-full min-h-screen m-auto'>
+        <div className='md:mt-0 bg-[#f3f8fe] py-10 flex flex-col w-full h-fit m-auto'>
           <div className=' flex flex-col w-full max-w-[1600px] mx-auto'>
-            <h1 className='mx-auto my-10 text-2xl'>Some of our favorites...</h1>
+            <h1 className='mx-auto mb-10 text-2xl'>Some of our favorites...</h1>
             <div className='md:px-10 flex overflow-hidden'>
               <div className='relative w-full px-0 m-auto'>
                 <Swiper
@@ -186,9 +203,9 @@ const Home = ( { products, categories } ) => {
                 </button>
               </div> 
             </div>
-            <div className='flex justify-center gap-10 py-4 mx-10 border-2 border-gray-300'>
-              <div className='flex gap-4 max-w-[200px]'>
-                <p className='m-auto text-xl text-center'>Only on www.astroluz.com</p>
+            <div className='justify-evenly flex flex-wrap gap-10 py-4 mx-10 border-t-2 border-b-2 border-gray-300'>
+              <div className='w-fit flex gap-4'>
+                <p className='m-auto text-xl text-center'>Only on astroluz.com</p>
               </div>
               <div className='flex gap-4 max-w-[200px]'>
                 <img className='' src="/images/free-shipping-icon.png" alt="" />
@@ -201,9 +218,69 @@ const Home = ( { products, categories } ) => {
               <div className='flex gap-4 max-w-[200px]'>
                 <img className='' src="/images/free-shipping-icon.png" alt="" />
                 <p className='text-sm text-center'>FREE SHIPPING <br /> (on orders over $40)</p>
+              </div>
+            </div> 
+          </div>
+        </div>
+
+        <div className='bg-[linear-gradient(to_bottom,#8cd0e3_0,#f08ccd_100%)] justify-evenly md:justify-center py-10 flex-col sm:flex-row  flex flex-wrap w-full h-fit m-auto'>
+            {products
+              .filter((product) => ((product.categories)
+              .map(category => category.slug)
+              .includes('featured')))
+              .map((product, id) => 
+                <div className='lg:w-1/3 sm:w-1/2 flex flex-col items-center w-full p-10'>
+                  <img className='max-w-[450px] w-full' src={product.image.url} alt="" />
+                  <div className='flex flex-col items-center w-9/12 m-auto -mt-6 bg-white'>
+                    <h1 className='text-xl'>{product.name}</h1>
+                    <p className='py-3 text-sm font-light'>Lorem ipsum dolor sit amet consectetur adipisicing eli.</p>
+                    <div className='-mb-4'>
+                      <Button text={`Shop ${product.name}`} link='' />
+                    </div>
+                  </div>
+                </div>
+            )}
+        </div>
+
+        <div className='bg-[#d4deff] relative'>
+          <div className='bg-[#bac9fb] top-0 bottom-0 right-0 left-0 z-0 m-auto w-3/4 h-4/6 md:w-1/3 md:h-1/2 absolute' />
+          <div className='md:w-10/12 md:flex-row z-10 flex flex-col py-10 mx-auto'>
+            <div className='md:w-1/2 md:order-1 z-10 flex flex-col justify-center order-2 w-10/12 mx-auto text-center'>
+              <div className='md:w-2/3 md:my-0 flex flex-col mx-auto my-4'>
+                <h1 className='text-2xl'>
+                  We are <TextTransition direction='down' inline delay={1} springConfig={presets.gentle}>{TEXTS[index % TEXTS.length]}</TextTransition>
+                </h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero voluptatum consequatur odit nam! Nulla adipisci eligendi animi recusandae a dicta.</p>
+                <div className='flex items-center gap-2 mx-auto mt-4'>
+                  <Button text='Learn more' link='/about' />
+                  <Button text='Our Faves' link='/shop' />
+                </div>
               </div>
             </div>
+            <div className='md:w-1/2 z-10 order-1 w-10/12 m-auto'>
+              <img src="images/we-are.png" alt="Who we are image" />
+            </div>
           </div>
+        </div>
+
+        <div className='columns-4 flex justify-center flex-wrap bg-[#fff0f0]'>
+          {products
+            .filter((product) => ((product.categories)
+            .map(category => category.slug)
+            .includes('featured-collection')))
+            .map((product, id) => 
+              <div key={id} className='lg:w-1/4 sm:w-1/2 flex flex-col items-center w-screen p-10'>
+                <div className='w-[300px] h-[300px] rounded-[50%] overflow-hidden'>
+                  <img className='object-cover w-auto h-full m-0' src={product.image.url} alt="" />
+                </div>
+                <div className=' flex flex-col items-center w-9/12 m-auto my-4'>
+                  <h1 className='text-lg text-center'>{product.name}</h1>
+                  <p className='mb-4 text-sm font-light text-center'>Lorem ipsum dolor sit amet consectetur adipisicing eli.</p>
+                </div>
+                <Button text={`Shop ${product.name}`} link='' />
+              </div>
+            )
+          }
         </div>
       </div>  
     </Layout>  
