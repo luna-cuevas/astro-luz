@@ -1,6 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
 
 import { toast } from "react-hot-toast";
+import { commerce } from "../lib/commerce";
 
 const Context = createContext();
 
@@ -8,16 +9,36 @@ export const StateContext = ({ children }) => {
   const [showCart, setShowCart] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const [cart, setCart] = useState({});
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [qty, setQty] = useState(1);
 
-  // useEffect(()=>{
-  //   localStorage.setItem('cart', cartItems)
-  //   console.log(cartItems)
-  // },[cartItems]);
+  //commerce.js API
 
-  // console.log(cartItems)
+  const fetchCart = async () => {
+    setCart(await commerce.cart.retrieve());
+  };
 
+  const handleAddToCart = async (productId, quantity) => {
+    const item = await commerce.cart.add(productId, quantity);
+
+    setTotalQuantity((totalQuantity) => totalQuantity + quantity);
+
+    setCart(item.cart);
+  };
+
+  useEffect(() => {
+    if (cart !== undefined) {
+      setTotalQuantity(cart.total_items);
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  ////
   let foundProduct;
 
   const incrementQty = () => {
@@ -33,9 +54,11 @@ export const StateContext = ({ children }) => {
     });
   };
 
-  const addToCart = (product, quantity) => {
+  const addToCart = async (product, quantity) => {
     // check if product already exists in cart
     const checkCart = cartItems.find((item) => item._id === product._id);
+
+    const item = await commerce.cart.add(product.id, quantity);
 
     // updates total price and quantity of cart
     setTotalPrice((totalPrice) => totalPrice + product.price * quantity);
@@ -126,6 +149,7 @@ export const StateContext = ({ children }) => {
         setCartItems,
         setTotalPrice,
         setTotalQuantity,
+        handleAddToCart,
       }}
     >
       {children}
