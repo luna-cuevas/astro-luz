@@ -3,6 +3,6 @@
     "swiper"
   ],
   "editor.stickyTabStops": false,
-  "editor.experimental.stickyScroll.enabled": true,
-  "breadcrumbs.enabled": false
+  "breadcrumbs.enabled": false,
+  "editor.stickyScroll.enabled": true
 }

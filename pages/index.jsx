@@ -18,6 +18,11 @@ import windowSize from '../lib/windowSize';
 import Button from '../components/Button';
 
 import TextTransition, { presets } from "react-text-transition";
+import Link from 'next/link';
+
+
+import CategoryList from "../components/CategoryList";
+import ProductList from "../components/ProductList";
 
 
 const Home = ( { products, categories } ) => {
@@ -81,11 +86,10 @@ const Home = ( { products, categories } ) => {
   useEffect(() => {
     const intervalId = setInterval(() =>
       setIndex(index => index + 1),
-      3000 // every 3 seconds
+      8000 // every 8 seconds
     );
     return () => clearTimeout(intervalId);
   }, []);
-
 
   return (
     <Layout categories={categories}>
@@ -184,16 +188,21 @@ const Home = ( { products, categories } ) => {
                     .map((product, id) => 
                       <SwiperSlide className="md:px-0 flex flex-col h-full px-10 mb-10 select-none">
                         <div className='bg-[white] mx-1 !h-full'>
-                          <img key={id} className='max-h-[200px] mt-4 m-auto rounded-lg' src={product.image.url} alt="Product Image" />
+                          <Link href={`/${product.permalink}`}>
+                            <img key={id} className='max-h-[200px] mt-4 m-auto cursor-pointer rounded-lg' src={product.image.url} alt="Product Image" />
+                          </Link>
                           <div className='flex flex-col items-center my-4'>
                             <h2 className='text-xl text-black'>{product.name}</h2>
                             {product.description.replace(/<[^>]+>/g, '')}
                             <p>{product.price.formatted_with_symbol}</p>
-                            <button className='px-4 py-1 my-3 text-sm bg-gray-300'>ADD TO BAG</button>
+                            <Link href={`/${product.permalink}`}>
+                              <button className='px-4 py-1 my-3 text-sm bg-gray-300'>ADD TO BAG</button>
+                            </Link>
                           </div>
                         </div>
                       </SwiperSlide>
-                  )}
+                    )
+                  }
                 </Swiper>
                 <button className="prev-arrow top-1/2 absolute" onClick={handlePrev} >
                   <img className='w-fit h-fit' src="/images/back-arrow.png" alt="" />
@@ -236,10 +245,11 @@ const Home = ( { products, categories } ) => {
                     <p className='py-3 text-sm font-light'>Lorem ipsum dolor sit amet consectetur adipisicing eli.</p>
                     <div className='-mb-4'>
                       <Button text={`Shop ${product.name}`} link='' />
-                    </div>
+                    </div>   
                   </div>
                 </div>
-            )}
+              )
+            }
         </div>
 
         <div className='bg-[#d4deff] relative'>
@@ -288,6 +298,7 @@ const Home = ( { products, categories } ) => {
 }
 
 export default Home
+
 export async function getStaticProps() {
   const { data: products } = await commerce.products.list();
   const { data: categories } = await commerce.categories.list();
