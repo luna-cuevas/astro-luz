@@ -18,7 +18,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className='flex w-full md:max-w-[33%] bg-[yellow] order-1 md:order-2 py-4 items-center flex-col'>
+      <div className='flex w-full md:max-w-[33%] bg-[#f5ea77] order-1 md:order-2 py-4 items-center flex-col'>
         <h1 className='text-2xl'>Hear the Latest</h1>
         <p>New products, offers, and more</p>
         <input className=' w-10/12 py-2 my-2 text-center focus:outline-none focus:outline-[#cdc5fa] ' type='email' placeholder='Enter your email...' />
