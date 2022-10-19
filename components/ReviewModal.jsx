@@ -26,12 +26,13 @@ const ReviewModal = ({ addReview, setAddReviewModal }) => {
       initialValues={initialValues}
       validationSchema={SignupSchema}
       onSubmit={(values, { setSubmitting }) => {
-        addReview(values.name, values.review, formValues.rating)
+        addReview(values.name, values.review, formValues.rating);
         setSubmitting(false);
+        window.location.reload();
       }}
     >
       {({ isSubmitting }) => (
-        <Form className='h-fit fixed top-0 bottom-0 left-0 right-0 z-10 flex flex-col w-1/3 px-5 py-5 m-auto bg-white'>
+        <Form className='h-fit md:w-1/3 fixed top-0 bottom-0 left-0 right-0 z-10 flex flex-col w-10/12 px-5 py-5 m-auto bg-white'>
         <button type='button' onClick={() => setAddReviewModal(false)} className='right-5 top-2 absolute'>X</button>
         <div className="flex flex-col w-full m-auto">
           <label className='mb-2 text-[rgba(0,0,0,.87)]' htmlFor="name">Name</label>
