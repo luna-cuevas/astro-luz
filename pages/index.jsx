@@ -20,17 +20,11 @@ import Button from '../components/Button';
 import TextTransition, { presets } from "react-text-transition";
 import Link from 'next/link';
 
-
-import CategoryList from "../components/CategoryList";
-import ProductList from "../components/ProductList";
-
-
 const Home = ( { products, categories } ) => {
   const swiper1Ref = useRef();
   const swiper2Ref = useRef();
   const size = windowSize();
   const [index, setIndex] = useState(0);
-
 
   const sliderImages = [
     {
@@ -41,26 +35,26 @@ const Home = ( { products, categories } ) => {
     },
     {
       image: '/images/candle2.jpg', 
-      description: 'image slide two', 
+      description: 'Lighten your mood with our scented candles', 
       bgColor: 'linear-gradient(to right,#FFE4C9 0,#1c73ff 100%)',
       bgColorMobile: 'linear-gradient(to bottom,#FFE4C9 0,#1c73ff 100%)'
     },
     {
       image: '/images/candle3.jpg', 
-      description: 'image slide three', 
+      description: 'Inspire your senses with our premium scents', 
       bgColor: 'linear-gradient(to right,#FFE4C9 0,#79ffa6 100%)',
       bgColorMobile: 'linear-gradient(to bottom,#FFE4C9 0,#79ffa6 100%)'
     },
     {
       image: '/images/candle4.jpg', 
-      description: 'image slide four', 
+      description: 'Limited time offer, get 30% off everything use promo code Astro', 
       bgColor: 'linear-gradient(to right,#FFE4C9 0,#ff8ccd 100%)',
       bgColorMobile: 'linear-gradient(to bottom,#FFE4C9 0,#ff8ccd 100%)'
     },
   ]
 
   const TEXTS = [
-    "woman owned",
+    "women owned",
     "radically expressive",
     "uniquely ourselves",
     "proud"
@@ -86,7 +80,7 @@ const Home = ( { products, categories } ) => {
   useEffect(() => {
     const intervalId = setInterval(() =>
       setIndex(index => index + 1),
-      8000 // every 8 seconds
+      10000 // every 8 seconds
     );
     return () => clearTimeout(intervalId);
   }, []);
@@ -124,11 +118,11 @@ const Home = ( { products, categories } ) => {
             style={{'color': 'white !important'}}
           >
             {sliderImages.map((item, id) => (
-              <SwiperSlide style={{'backgroundImage': size.width < 640 ? item.bgColorMobile : ''}} className="flex flex-col p-4 select-none">
-                <img key={id} className='h-full p-2 bg-[#2e2e2e] mx-0 m-auto rounded-lg' src={item.image} alt="" />
+              <SwiperSlide key={id} style={{'backgroundImage': size.width < 640 ? item.bgColorMobile : ''}} className="flex flex-col p-4 select-none">
+                <img className='h-full p-2 bg-[#2e2e2e] mx-0 m-auto rounded-lg' src={item.image} alt="" />
                 {size.width < 640 && (
-                  <div  className={`m-auto text-black flex flex-wrap h-full w-full`}>
-                    <h1 className='m-auto mt-10 text-2xl'>{item.description}</h1>
+                  <div  className={`m-auto text-black my-4 flex flex-wrap h-full w-full`}>
+                    <h1 className='md:text-2xl md:text-left px-4 m-auto text-xl text-center'>{item.description}</h1>
                   </div>
                 )}
               </SwiperSlide>
@@ -151,7 +145,7 @@ const Home = ( { products, categories } ) => {
             {sliderImages.map((item, id) => (
               <SwiperSlide style={{'backgroundImage': item.bgColor}} key={id} className="flex m-auto mx-0 select-none">
                 <div  className={`m-auto flex flex-wrap h-full w-full`}>
-                  <h1 className='lg:m-auto flex mt-auto mb-0 sm:my-auto m-auto sm:mr-10 text-2xl max-w-[300px]'>{item.description}</h1>
+                  <h1 className='lg:m-auto flex mt-auto mb-0 sm:my-auto m-auto sm:mr-10 text-3xl max-w-[300px]'>{item.description}</h1>
                 </div>
               </SwiperSlide>
             ))}
@@ -186,18 +180,15 @@ const Home = ( { products, categories } ) => {
                     .map(category => category.slug)
                     .includes('our-favorites')))
                     .map((product, id) => 
-                      <SwiperSlide className="md:px-0 flex flex-col h-full px-10 mb-10 select-none">
+                      <SwiperSlide key={id} className="md:px-0 flex flex-col h-full px-10 mb-10 select-none">
                         <div className='bg-[white] mx-1 !h-full'>
                           <Link href={`/${product.permalink}`}>
                             <img key={id} className='max-h-[200px] mt-4 m-auto cursor-pointer rounded-lg' src={product.image.url} alt="Product Image" />
                           </Link>
                           <div className='flex flex-col items-center my-4'>
                             <h2 className='text-xl text-black'>{product.name}</h2>
-                            {product.description.replace(/<[^>]+>/g, '')}
-                            <p>{product.price.formatted_with_symbol}</p>
-                            <Link href={`/${product.permalink}`}>
-                              <button className='px-4 py-1 my-3 text-sm bg-gray-300'>ADD TO BAG</button>
-                            </Link>
+                            <p className='my-2 text-xl'>{product.price.formatted_with_symbol}</p>
+                            <Button text={`Shop ${product.name}`} link={`/${product.permalink}`} />
                           </div>
                         </div>
                       </SwiperSlide>
@@ -212,21 +203,21 @@ const Home = ( { products, categories } ) => {
                 </button>
               </div> 
             </div>
-            <div className='justify-evenly flex flex-wrap gap-10 py-4 mx-10 border-t-2 border-b-2 border-gray-300'>
-              <div className='w-fit flex gap-4'>
+            <div className='justify-evenly lg:gap-10 md:mx-10 flex flex-wrap py-4 border-t-2 border-b-2 border-gray-300'>
+              <div className='md:w-fit flex w-full gap-4'>
                 <p className='m-auto text-xl text-center'>Only on astroluz.com</p>
               </div>
-              <div className='flex gap-4 max-w-[200px]'>
-                <img className='' src="/images/free-shipping-icon.png" alt="" />
-                <p className='text-sm text-center'>FREE SHIPPING <br /> (on orders over $40)</p>
+              <div className='flex px-4 md:px-0 items-center flex-col md:flex-row gap-4 w-1/3 md:w-full md:max-w-[200px]'>
+                <img className='p-4 w-[70px] mx-auto' src="/images/free-shipping-icon.png" alt="" />
+                <p className='md:text-sm text-xs text-center'>FREE SHIPPING <br /> <span className='text-xs'>(on orders over $40)</span></p>
               </div>
-              <div className='flex gap-4 max-w-[200px]'>
-                <img className='' src="/images/free-shipping-icon.png" alt="" />
-                <p className='text-sm text-center'>FREE SHIPPING <br /> (on orders over $40)</p>
+              <div className='flex px-4 md:px-0 items-center flex-col md:flex-row gap-4 w-1/3 md:max-w-[200px]'>
+                <img className='p-4 w-[70px] mx-auto' src="/images/free-shipping-icon.png" alt="" />
+                <p className='md:text-sm text-xs text-center'>FREE SAMPLES <br /> <span className='text-xs'>(Yes, please!)</span></p>
               </div>
-              <div className='flex gap-4 max-w-[200px]'>
-                <img className='' src="/images/free-shipping-icon.png" alt="" />
-                <p className='text-sm text-center'>FREE SHIPPING <br /> (on orders over $40)</p>
+              <div className='flex px-4 md:px-0 items-center flex-col md:flex-row gap-4 w-1/3 md:max-w-[200px]'>
+                <img className='p-4 w-[70px] mx-auto' src="/images/free-shipping-icon.png" alt="" />
+                <p className='md:text-sm text-xs text-center'>SURPRISES <br /> <span className='text-xs'>(You will love. Trust.)</span></p>
               </div>
             </div> 
           </div>
@@ -236,15 +227,16 @@ const Home = ( { products, categories } ) => {
             {products
               .filter((product) => ((product.categories)
               .map(category => category.slug)
-              .includes('featured')))
+              .includes('featured-collection')))
+              .slice(0, 2)
               .map((product, id) => 
-                <div className='lg:w-1/3 sm:w-1/2 flex flex-col items-center w-full p-10'>
+                <div key={id} className='lg:w-1/3 sm:w-1/2 flex flex-col items-center w-full p-10'>
                   <img className='max-w-[450px] w-full' src={product.image.url} alt="" />
                   <div className='flex flex-col items-center w-9/12 m-auto -mt-6 bg-white'>
                     <h1 className='text-xl'>{product.name}</h1>
-                    <p className='py-3 text-sm font-light'>Lorem ipsum dolor sit amet consectetur adipisicing eli.</p>
+                    <p className='px-3 py-3 text-sm font-light text-center'>Lorem ipsum dolor sit amet consectetur adipisicing eli.</p>
                     <div className='-mb-4'>
-                      <Button text={`Shop ${product.name}`} link='' />
+                    <Button text={`Shop ${product.name}`} link={product.permalink} />
                     </div>   
                   </div>
                 </div>
